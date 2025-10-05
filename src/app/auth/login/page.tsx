@@ -2,9 +2,8 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
-import LeftLogo from '../../../public/Saksham_logo.png'
-import RightLogo from '../../../public/Saksham_logo2.jpg'
-import SupabaseAuthTest from '@/components/supabase-auth-test'
+import LeftLogo from '../../../../public/Saksham_logo.png'
+import RightLogo from '../../../../public/Saksham_logo2.jpg'
 import { signIn, signUp, resetPassword, signInWithGoogle } from './actions' // added import
 
 type FormType = 'login' | 'signup' | 'forgot-password'

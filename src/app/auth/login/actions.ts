@@ -96,5 +96,5 @@ export async function signOut() {
     return { error: error.message }
   }
 
-  return redirect('/login')
+  return redirect('/auth/login')
 }
