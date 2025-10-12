@@ -12,6 +12,7 @@ import supportIcon from '../../public/icons/Supports.svg'
 import emergencyIcon from '../../public/icons/Emergency.svg'
 import classRoomIcon from '../../public/icons/Classroom.svg'
 import simulationIcon from '../../public/icons/simulation.svg'
+import menuIcon from '../../public/icons/Menu.svg'
 
 const navItems = [
     { icon: homeIcon, label: 'Home', path: '/' },
@@ -19,7 +20,7 @@ const navItems = [
     { icon: simulationIcon, label: 'Simulation', path: '/simulation' },
     { icon: alertsIcon, label: 'Alerts', path: '/alerts' },
     { icon: supportIcon, label: 'Supports', path: '/support' },
-    { icon: emergencyIcon, label: 'Emergency Helpline', path: '/emergency' },
+    { icon: emergencyIcon, label: 'Emergency Helpline', path: '/EmergencyHelpLine' },
 ]
 
 
@@ -29,6 +30,10 @@ const NavBar = () => {
     const [user, setUser] = useState<any>(null)
     const [isDropdownOpen, setIsDropdownOpen] = useState(false)
     const dropdownRef = useRef<HTMLDivElement>(null)
+
+    // NEW: mobile menu state and ref
+    const [isMenuOpen, setIsMenuOpen] = useState(false)
+    const menuRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
         // Get initial user state
@@ -41,10 +46,13 @@ const NavBar = () => {
             setUser(session?.user ?? null)
         })
 
-        // Click outside listener
+        // Click outside listener for dropdown and menu
         const handleClickOutside = (event: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
                 setIsDropdownOpen(false)
+            }
+            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+                setIsMenuOpen(false)
             }
         }
 
@@ -59,17 +67,19 @@ const NavBar = () => {
     const handleSignOut = async () => {
         await signOut()
         setIsDropdownOpen(false)
+        setIsMenuOpen(false)
     }
 
     return (
         <div className='w-full'>
-            <nav className="w-full flex items-center justify-between px-8 py-2 fixed top-0 left-0 z-50 shadow-md transition-all duration-300 bg-[#164868] text-white">
+            <nav className="w-full flex items-center justify-between px-4 sm:px-8 py-2 fixed top-0 left-0 z-50 shadow-md transition-all duration-300 bg-[#164868] text-white">
                 <div className='flex items-center gap-4'>
                     {user ? (
                         <div className="relative" ref={dropdownRef}>
                             <button
                                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                                 className="flex items-center gap-2 hover:opacity-80"
+                                aria-expanded={isDropdownOpen}
                             >
                                 <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-white">
                                     {user.user_metadata?.avatar_url ? (
@@ -148,22 +158,94 @@ const NavBar = () => {
                     )}
                     <div className='flex items-center gap-2'>
                         <Image src={logo} alt="Saksham Logo" width={50} height={50} />
-                        <h1>Saksham (NDR & Empowerment)</h1>
+                        <h1 className="text-sm sm:text-base">Saksham (NDR & Empowerment)</h1>
                     </div>
                 </div>
 
-                <div className='text-md font-medium'>
+                {/* Mobile menu button */}
+                <div className="flex items-center md:hidden">
+                    <button
+                        onClick={() => setIsMenuOpen(!isMenuOpen)}
+                        aria-label="Open menu"
+                        aria-expanded={isMenuOpen}
+                        className="p-2 rounded-md hover:bg-white/10"
+                    >
+                        <Image src={menuIcon} alt="Menu" width={24} height={24} />
+                    </button>
+                </div>
+
+                {/* Desktop nav items */}
+                <div className='hidden md:block text-md font-medium'>
                     <ul className='flex items-center gap-8'>
                         {navItems.map((item) => (
                             <li key={item.label}>
                                 <Link href={item.path} className='flex items-center gap-1 hover:opacity-80'>
-                                    <Image src={item.icon.src} alt={item.label} width={20} height={20} />
+                                    <Image src={item.icon} alt={item.label} width={20} height={20} />
                                     <span>{item.label}</span>
                                 </Link>
                             </li>
                         ))}
                     </ul>
                 </div>
+
+                {/* Mobile menu panel */}
+                {isMenuOpen && (
+                    <div ref={menuRef} className="absolute top-full right-0 left-0 mt-2 z-40 md:hidden">
+                        {/* Match navbar color and use white text; subtle divide and shadow */}
+                        <div className="bg-[#164868] text-white rounded-b-lg shadow-lg divide-y divide-white/10">
+                            <ul className="flex flex-col p-2 sm:p-3 space-y-1">
+                                {navItems.map((item) => (
+                                    <li key={item.label}>
+                                        <Link
+                                            href={item.path}
+                                            onClick={() => setIsMenuOpen(false)}
+                                            className="flex items-center gap-3 px-3 py-2 rounded hover:bg-white"
+                                        >
+                                            <Image
+                                                src={item.icon}
+                                                alt={item.label}
+                                                width={20}
+                                                height={20}
+                                                className="w-5 h-5 invert"
+                                            />
+                                            <span className="text-white">{item.label}</span>
+                                        </Link>
+                                    </li>
+                                ))}
+                                <li>
+                                    {user ? (
+                                        <button
+                                            onClick={() => { setIsMenuOpen(false); setIsDropdownOpen(true); }}
+                                            className="w-full text-left flex items-center gap-3 px-3 py-2 rounded hover:bg-white/10"
+                                        >
+                                            <Image src={userIcon.src} alt="Account" width={20} height={20} className="w-5 h-5 invert" />
+                                            <span className="text-white">Account</span>
+                                        </button>
+                                    ) : (
+                                        <Link
+                                            href="/auth/login"
+                                            onClick={() => setIsMenuOpen(false)}
+                                            className="flex items-center gap-3 px-3 py-2 rounded hover:bg-white/10"
+                                        >
+                                            <Image src={userIcon.src} alt="Login" width={20} height={20} className="w-5 h-5 invert" />
+                                            <span className="text-white">Login</span>
+                                        </Link>
+                                    )}
+                                </li>
+                                {user && (
+                                    <li>
+                                        <button
+                                            onClick={handleSignOut}
+                                            className="w-full text-left flex items-center gap-3 px-3 py-2 rounded hover:bg-white/10 text-white"
+                                        >
+                                            <span>Sign Out</span>
+                                        </button>
+                                    </li>
+                                )}
+                            </ul>
+                        </div>
+                    </div>
+                )}
             </nav>
         </div>
     )

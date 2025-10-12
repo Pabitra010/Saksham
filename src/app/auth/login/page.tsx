@@ -9,7 +9,6 @@ import { signIn, signUp, resetPassword, signInWithGoogle } from './actions' // a
 type FormType = 'login' | 'signup' | 'forgot-password'
 
 const LoginPage = () => {
-  const router = useRouter()
   const [activeForm, setActiveForm] = useState<FormType>('login')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)

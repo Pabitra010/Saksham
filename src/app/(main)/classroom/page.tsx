@@ -16,7 +16,7 @@ const Listtype = [
   { name: "About Course", },
   { name: "Notes", },
   { name: "Quiz", },
-  { name: "FeedBack", },
+  { name: "Final Exam", },
 ];
 
 const ClassRoomPage = () => {
@@ -32,12 +32,24 @@ const ClassRoomPage = () => {
 
   return (
     <div className='w-full px-5 py-3 mt-17 rounded-lg'>
-      <div className='flex items-center font-bold text-blue-900 bg-gray-200 rounded-lg'>
-        {Listtype.map((item, index) => (
-          <div key={index} onClick={() => setActiveItem(item.name)} className='px-4 py-2 m-2 rounded-lg hover:shadow-lg cursor-pointer hover:bg-gray-100 transition'>
-            {item.name}
-          </div>
-        ))}
+      {/* Responsive tab bar: horizontal scroll on small screens, wrapped on md+ */}
+      <div className="bg-gray-200 rounded-lg">
+        <div className="flex gap-2 px-2 py-2 overflow-x-auto md:flex-wrap md:justify-start">
+          {Listtype.map((item, index) => (
+            <button
+              key={index}
+              onClick={() => setActiveItem(item.name)}
+              className={
+                'flex-shrink-0 whitespace-nowrap px-3 py-2 rounded-lg transition ' +
+                (activeItem === item.name
+                  ? 'bg-white text-blue-900 shadow'
+                  : 'text-blue-900 hover:bg-gray-100')
+              }
+            >
+              {item.name}
+            </button>
+          ))}
+        </div>
       </div>
       <div className='bg-gray-200 mt-3 rounded-md'>
         <div>
@@ -66,10 +78,9 @@ const ClassRoomPage = () => {
               <QuizSection />
             </div>
           )}
-          {activeItem === "FeedBack" && (
-            <div className='p-4'>
-              <h2 className='text-2xl font-bold mb-4'>FeedBack</h2>
-              <p>This section contains information about the feedback process, including how to submit feedback and what to expect.</p>
+          {activeItem === "Final Exam" && (
+            <div className='p-4 flex flex-col items-center justify-center h-64'>
+              <p className="text-gray-600">No Exam Schedule Available Currently</p>
             </div>
           )}
         </div>
