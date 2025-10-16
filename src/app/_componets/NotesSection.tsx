@@ -8,7 +8,7 @@ const NotesSection = () => {
 
     const handleModuleClick = (module: string) => {
         // Logic to load the selected module's notes
-        console.log(`Loading notes for ${module}`);
+    // loading notes for module (debug)
     }
 
     return (

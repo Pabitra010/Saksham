@@ -16,9 +16,7 @@ export const getAlertsData = async (): Promise<AlertDataRow[]> => {
         .select('*')
         .order('report_time', { ascending: false })
 
-    console.log('====================================');
-    console.log(data);
-    console.log('====================================');
+    // alerts data retrieved (debug)
     if (error) {
         console.error('Error fetching alerts:', error)
         return []

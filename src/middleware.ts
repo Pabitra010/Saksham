@@ -33,7 +33,23 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  await supabase.auth.getSession()
+  // Authenticate the request with a server-verified user call.
+  // getUser() will contact the Supabase Auth server and validate the cookie/token.
+  // It's common for unauthenticated requests to not have a session; supabase may
+  // surface an AuthSessionMissingError in that case. We catch and quietly ignore
+  // that expected case so it doesn't fill logs with stack traces.
+  try {
+    const { data: { user } } = await supabase.auth.getUser()
+    // You can use `user` or return a redirect here if you want to block access.
+  } catch (err: any) {
+    // Supabase sets __isAuthError on auth-related errors
+    if (err && err.__isAuthError) {
+      // expected when there is no session; ignore
+    } else {
+      // unexpected error - log for investigation
+      console.warn('supabase auth getUser unexpected error in middleware', err)
+    }
+  }
 
   return response
 }

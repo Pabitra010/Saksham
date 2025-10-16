@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import SupabaseProvider from "@/components/providers/SupabaseProvider";
 import NavBar from "@/components/NavBar";
+import ChatbaseWidget from "@/components/ChatbaseWidget";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,6 +35,8 @@ export default function RootLayout({
               <NavBar />
           </div>
           {children}
+          {/* Show chat widget only for authenticated users */}
+          <ChatbaseWidget authRequired={true} />
         </SupabaseProvider>
       </body>
     </html>

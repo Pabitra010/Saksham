@@ -4,12 +4,14 @@ import classRoomIcon from '../../public/icons/FeatureClassRoom.svg'
 import simulationIcon from '../../public/icons/FeatureSimulation.svg'
 import SupportsIcon from '../../public/icons/FeatureSupports.svg'
 import alertsIcon from '../../public/icons/FeatureAlerts.svg'
+import Link from 'next/link'
+import path from 'path'
 
 const features = [
-    { icon: classRoomIcon, title: 'Classroom', description: 'Educational resources and materials for disaster preparedness' },
-    { icon: simulationIcon, title: 'Simulations', description: 'Realistic disaster scenarios for training and practice' },
-    { icon: alertsIcon, title: 'Alerts', description: 'Live updates and news about ongoing disasters' },
-    { icon: SupportsIcon, title: 'Community Support', description: 'Connect with volunteers and support networks' }
+    { icon: classRoomIcon, title: 'Classroom', description: 'Educational resources and materials for disaster preparedness', path: '/classroom' },
+    { icon: simulationIcon, title: 'Simulations', description: 'Realistic disaster scenarios for training and practice', path: '/simulation' },
+    { icon: alertsIcon, title: 'Alerts', description: 'Live updates and news about ongoing disasters', path: '/alerts' },
+    { icon: SupportsIcon, title: 'Community Support', description: 'Connect with volunteers and support networks', path: '/CommunitySupports' }
 ]
 
 const FeaturePage = () => {
@@ -20,7 +22,7 @@ const FeaturePage = () => {
             </h2>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8'>
                 {features.map((feature) => (
-                    <div
+                    <Link href={feature.path}
                         key={feature.title}
                         className='bg-[#F8F9FA] p-8 rounded-lg text-center flex flex-col items-center cursor-pointer hover:shadow-lg transition-shadow duration-300'
                     >
@@ -39,7 +41,7 @@ const FeaturePage = () => {
                         <p className='text-gray-700 leading-relaxed'>
                             {feature.description}
                         </p>
-                    </div>
+                    </Link>
                 ))}
             </div>
         </section>
