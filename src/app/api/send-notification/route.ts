@@ -9,7 +9,10 @@ import { createClient } from '@supabase/supabase-js';
 async function sendNotification(phoneNumber: string, message: string): Promise<boolean> {
   try {
     const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    // Prefer a server-only service role key for privileged server actions.
+    // Set SUPABASE_SERVICE_ROLE_KEY in Vercel/production env (do NOT expose this to the client).
+    // Fall back to the anon key for local development if service role key is not provided.
+    const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
     if (!SUPABASE_URL || !SUPABASE_KEY) {
       console.error('Supabase credentials not configured');
   // debug: notification payload
