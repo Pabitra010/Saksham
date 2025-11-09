@@ -54,7 +54,7 @@ const NotesSection = () => {
             </div>
             <div className="w-full md:w-3/4 bg-gray-100 rounded-md p-6">
                 {/* Make the notes area scrollable on overflow similar to the left modules list */}
-                <div className="space-y-4 max-h-72 md:max-h-[60vh] overflow-auto pr-2">
+                <div className="space-y-4 max-h-screen md:max-h-[60vh] overflow-auto pr-2">
                 {/* Module 1 */}
                 {selectedModule === 'Module 1' && (
                     <>
