@@ -3,7 +3,8 @@ import { createClient } from "@/utils/supabase/server";
 import AccountEditor from "../../../components/AccountEditor";
 import Link from "next/link";
 
-export default async function MyAccountPage({ params }: { params: { usser: string } }) {
+export default async function MyAccountPage(props: any) {
+  const { params } = props || {};
   const supabase = createClient(undefined);
 
   // Try to get current session user (server-side)
